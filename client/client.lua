@@ -1,16 +1,14 @@
 Keys = {
-  ["ESC"]       = 322,  ["F1"]        = 288,  ["F2"]        = 289,  ["F3"]        = 170,  ["F5"]  = 166,  ["F6"]  = 167,  ["F7"]  = 168,  ["F8"]  = 169,  ["F9"]  = 56,   ["F10"]   = 57, 
-  ["~"]         = 243,  ["1"]         = 157,  ["2"]         = 158,  ["3"]         = 160,  ["4"]   = 164,  ["5"]   = 165,  ["6"]   = 159,  ["7"]   = 161,  ["8"]   = 162,  ["9"]     = 163,  ["-"]   = 84,   ["="]     = 83,   ["BACKSPACE"]   = 177, 
-  ["TAB"]       = 37,   ["Q"]         = 44,   ["W"]         = 32,   ["E"]         = 38,   ["R"]   = 45,   ["T"]   = 245,  ["Y"]   = 246,  ["U"]   = 303,  ["P"]   = 199,  ["["]     = 116,  ["]"]   = 40,   ["ENTER"]   = 18,
-  ["CAPS"]      = 137,  ["A"]         = 34,   ["S"]         = 8,    ["D"]         = 9,    ["F"]   = 23,   ["G"]   = 47,   ["H"]   = 74,   ["K"]   = 311,  ["L"]   = 182,
-  ["LEFTSHIFT"] = 21,   ["Z"]         = 20,   ["X"]         = 73,   ["C"]         = 26,   ["V"]   = 0,    ["B"]   = 29,   ["N"]   = 249,  ["M"]   = 244,  [","]   = 82,   ["."]     = 81,
-  ["LEFTCTRL"]  = 36,   ["LEFTALT"]   = 19,   ["SPACE"]     = 22,   ["RIGHTCTRL"] = 70, 
-  ["HOME"]      = 213,  ["PAGEUP"]    = 10,   ["PAGEDOWN"]  = 11,   ["DELETE"]    = 178,
-  ["LEFT"]      = 174,  ["RIGHT"]     = 175,  ["UP"]        = 27,   ["DOWN"]      = 173,
-  ["NENTER"]    = 201,  ["N4"]        = 108,  ["N5"]        = 60,   ["N6"]        = 107,  ["N+"]  = 96,   ["N-"]  = 97,   ["N7"]  = 117,  ["N8"]  = 61,   ["N9"]  = 118
+  ["ESC"]       = 1,  ["F1"]        = 59,  ["F2"]        = 60,  ["F3"]        = 61,  ["F5"]  = 63,  ["F6"]  = 64,  ["F7"]  = 65,  ["F8"]  = 66,  ["F9"]  = 67,   ["F10"]   = 68, 
+  ["~"]         = 41,  ["1"]         = 2,  ["2"]         = 3,  ["3"]         = 4,  ["4"]   = 5,  ["5"]   = 6,  ["6"]   = 7,  ["7"]   = 8,  ["8"]   = 9,  ["9"]     = 10,  ["-"]   = 12,   ["="]     = 13,   ["BACKSPACE"]   = 14, 
+  ["TAB"]       = 37,   ["Q"]         = 16,   ["W"]         = 17,   ["E"]         = 18,   ["R"]   = 19,   ["T"]   = 20,  ["Y"]   = 21,  ["U"]   = 22,  ["P"]   = 25,  ["["]     = 26,  ["]"]   = 27,   ["ENTER"]   = 28,
+  ["CAPS"]      = 137,  ["A"]         = 30,   ["S"]         = 31,    ["D"]         = 32,    ["F"]   = 33,   ["G"]   = 34,   ["H"]   = 35,   ["K"]   = 37,  ["L"]   = 38,
+  ["LEFTSHIFT"] = 42,   ["Z"]         = 44,   ["X"]         = 45,   ["C"]         = 46,   ["V"]   = 47,    ["B"]   = 48,   ["N"]   = 49,  ["M"]   = 50,  [","]   = 51,   ["."]     = 52,
+  ["LEFTCTRL"]  = 29,   ["LEFTALT"]   = 56,   ["SPACE"]     = 57,   ["RIGHTCTRL"] = 157, 
+  ["HOME"]      = 213,  ["PAGEUP"]    = 10,   ["PAGEDOWN"]  = 11,   ["DELETE"]    = 211,
+  ["LEFT"]      = 203,  ["RIGHT"]     = 205,  ["UP"]        = 200,   ["DOWN"]      = 208,
+  ["NENTER"]    = 156,  ["N4"]        = 75,  ["N5"]        = 76,   ["N6"]        = 77,  ["N+"]  = 78,   ["N-"]  = 74,   ["N7"]  = 71,  ["N8"]  = 72,   ["N9"]  = 73
 }
- 
-
 
 local menuIsOpen = false
 local contacts = {}
@@ -27,16 +25,9 @@ local PhoneInCall = {}
 local disableKeys = false
 local flightmode = false
 
-
-
-
-
-
-
-
 --====================================================================================
 
-Citizen.CreateThread(function()
+--[[Citizen.CreateThread(function()
 	while ESX == nil do
 		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 		Citizen.Wait(0)
@@ -48,15 +39,14 @@ Citizen.CreateThread(function()
 
 	ESX.PlayerData = ESX.GetPlayerData()
 
-end)
+end)]]
 
 
 
-
+local job = nil
 RegisterNetEvent('esx:setJob')
-AddEventHandler('esx:setJob', function(job)
-	ESX.PlayerData.job = job
-
+AddEventHandler('esx:setJob', function(datajob)
+	datajob = job
 end)
 
 
@@ -67,11 +57,11 @@ end)
 --====================================================================================
 
 
-RegisterKeyMapping('TooglePhone', 'Open Phone', 'keyboard', Config.OpenPhone);
+--RegisterKeyMapping('TooglePhone', 'Open Phone', 'keyboard', Config.OpenPhone);--dont have this feature in citizen
 
-RegisterCommand("TooglePhone",function()
+--[[RegisterCommand("TooglePhone",function()
 	TooglePhone()
-end)
+end)]] --no need of this
 
 
 
@@ -86,64 +76,21 @@ CreateThread(function()
   while true do
       if disableKeys then
           Wait(0)
-          DisableControlAction(0, 0, true)    -- Next Camera
-          DisableControlAction(0, 1, true)    -- Look Left/Right
-          DisableControlAction(0, 2, true)    -- Look up/Down
-          DisableControlAction(0, 16, true)   -- Next Weapon
-          DisableControlAction(0, 17, true)   -- Select Previous Weapon
-          DisableControlAction(0, 18, true)   -- Attack            
-          DisableControlAction(0, 22, true)   -- Jump
-          DisableControlAction(0, 24, true)   -- Attack
-          DisableControlAction(0, 25, true)   -- Aim
-          DisableControlAction(0, 26, true)   -- Look Behind
-          DisableControlAction(0, 36, true)   -- Input Duck/Sneak
-          DisableControlAction(0, 37, true)   -- Weapon Wheel
-          DisableControlAction(0, 44, true)   -- Cover
-          DisableControlAction(0, 45, true)   -- Cover
-          DisableControlAction(0, 47, true)   -- Detonate
-          DisableControlAction(0, 55, true)   -- Dive
-          DisableControlAction(0, 69, true)   -- Attack            
-          DisableControlAction(0, 75, true)   -- Exit Vehicle
-          DisableControlAction(0, 76, true)   -- Vehicle Handbrake
-          DisableControlAction(0, 81, true)   -- Next Radio (Vehicle)
-          DisableControlAction(0, 82, true)   -- Previous Radio (Vehicle)
-          DisableControlAction(0, 91, true)   -- Passenger Aim (Vehicle)
-          DisableControlAction(0, 92, true)   -- Passenger Attack (Vehicle)
-          DisableControlAction(0, 99, true)   -- Select Next Weapon (Vehicle)
-          DisableControlAction(0, 106, true)  -- Control Override (Vehicle)
-          DisableControlAction(0, 114, true)  -- Fly Attack (Flying)
-          DisableControlAction(0, 115, true)  -- Next Weapon (Flying)
-          DisableControlAction(0, 121, true)  -- Fly Camera (Flying)
-          DisableControlAction(0, 122, true)  -- Control OVerride (Flying)
-          DisableControlAction(0, 135, true)  -- Control OVerride (Sub)
-          DisableControlAction(0, 142, true)   -- Attack
-          DisableControlAction(0, 144, true)   -- Attack            
-          DisableControlAction(0, 200, true)  -- Pause Menu
-          DisableControlAction(0, 223, true)   -- Attack
-          DisableControlAction(0, 229, true)   -- Attack    
-          DisableControlAction(0, 237, true)   -- Attack            
-       --   DisableControlAction(0, 245, true)  -- Chat
-          DisableControlAction(0, 257, true)   -- Attack    
-          DisableControlAction(0, 329, true)   -- Attack
-          DisableControlAction(0, 346, true)   -- Attack            
-
-          DisableControlAction(0, 289, true) -- Inventory
-          DisableControlAction(0, 311, true) -- Inventory
-          DisableControlAction(0, 303, true) -- Inventory
-          DisableControlAction(0, 182, true) -- Inventory
+          SetPlayerControl(GetPlayerId())
       else
           Wait(200)
       end
   end
 end)
 
+RegisterNetEvent('gksphone:disableControlActions') -- added
 AddEventHandler('gksphone:disableControlActions', function(bool)
   disableKeys = bool
 end)
 
 RegisterNUICallback('focusphone', function(data, cb)
   if menuIsOpen then
-    SetNuiFocusKeepInput(data.focusphone)
+    SetNuiFocus(data.focusphone)
   end
 end)
 
@@ -159,7 +106,7 @@ function TooglePhone()
         PhonePlayIn()
         SetCursorLocation(0.9, 0.922)
         SetNuiFocus(true, true)
-        SetNuiFocusKeepInput(true)
+        --SetNuiFocusKeepInput(true)
         TriggerEvent('gksphone:disableControlActions', true)
   
       else
@@ -167,27 +114,27 @@ function TooglePhone()
         ignoreFocus = false
         PhonePlayOut()
         SetNuiFocus(false, false)
-        SetNuiFocusKeepInput(false)
+        --SetNuiFocusKeepInput(false)
         TriggerEvent('camera:stop', false)
         TriggerEvent('gksphone:disableControlActions', false)
         TriggerEvent('gksphone:faketakestop')
         SendNUIMessage({event = 'imageclose'})
       end
     else
-      ESX.ShowNotification(_U('no_item'))
+      PrintStringWithLiteralStringNow("STRING", (_U('no_item')), 1000, 1)
+      --ESX.ShowNotification(_U('no_item'))
     end
   end)
 end
 
 RegisterNUICallback('closePhone', function(data, cb)
-
   menuIsOpen = false
   ignoreFocus = false
   SendNUIMessage({show = false})
   flas = false
   PhonePlayOut()
   SetNuiFocus(false, false)
-  SetNuiFocusKeepInput(false)
+  --SetNuiFocusKeepInput(false)
   TriggerEvent('camera:stop', false)
   TriggerEvent('gksphone:disableControlActions', false)
   cb()
@@ -250,7 +197,6 @@ AddEventHandler("gksphone:receiveMessage", function(message)
   SendNUIMessage({event = 'newMessage', message = message})
   table.insert(messages, message)
   if message.owner == 0 then
-    ESX.TriggerServerCallback('gksphone:phone-check', function(durum)
       if durum ~= nil then
         local text = _U('new_one_message')
 
@@ -270,7 +216,6 @@ AddEventHandler("gksphone:receiveMessage", function(message)
         Citizen.Wait(300)
         PlaySound(-1, "Menu_Accept", "Phone_SoundSet_Default", 0, 0, 1)
       end
-    end)
   end
 end)
 
@@ -380,7 +325,7 @@ RegisterNetEvent("gksphone:acceptCall")
 AddEventHandler("gksphone:acceptCall", function(infoCall, initiator)
   if inCall == false then
     inCall = true
-    if Config.UseMumbleVoIP then
+    --[[if Config.UseMumbleVoIP then
       exports["mumble-voip"]:SetCallChannel(infoCall.id+1)
     elseif Config.PMAVoice then
       exports["pma-voice"]:setCallChannel(infoCall.id+1)
@@ -390,7 +335,7 @@ AddEventHandler("gksphone:acceptCall", function(infoCall, initiator)
     else
       NetworkSetVoiceChannel(infoCall.id + 1)
       NetworkSetTalkerProximity(0.0)
-    end
+    end]] -- NOT IN CITIZEN ( YOU CAN CONVERT IT WITH LIBERTYCITRY VC)
   end
   PhonePlayCall()
   SendNUIMessage({event = 'acceptCall', infoCall = infoCall, initiator = initiator})
@@ -400,7 +345,7 @@ RegisterNetEvent("gksphone:rejectCall")
 AddEventHandler("gksphone:rejectCall", function(infoCall)
   if inCall == true then
     inCall = false
-    if Config.UseMumbleVoIP then
+    --[[if Config.UseMumbleVoIP then
       exports["mumble-voip"]:SetCallChannel(0)
     elseif Config.PMAVoice then
       exports["pma-voice"]:removePlayerFromCall(0)
@@ -410,7 +355,7 @@ AddEventHandler("gksphone:rejectCall", function(infoCall)
     else
       Citizen.InvokeNative(0xE036A705F989E049)
       NetworkSetTalkerProximity(2.5)
-    end
+    end]] -- NOT IN CITIZEN ( YOU CAN CONVERT IT WITH LIBERTYCITRY VC)
   end
   aminCall = false
   dnemeasd = nil
@@ -501,7 +446,7 @@ RegisterNUICallback('getMessages', function(data, cb)
 end)
 RegisterNUICallback('sendMessages', function(data, cb)
   if data.message == '%pos%' then
-    local myPos = GetEntityCoords(PlayerPedId())
+    local myPos = GetCharCoordinates(GetPlayerChar(-1))
     data.message = 'GPS: ' .. myPos.x .. ', ' .. myPos.y
   end
   TriggerServerEvent('gksphone:sendMessages', data.phoneNumber, data.message)
@@ -604,8 +549,8 @@ end)
 
 RegisterNUICallback('sendGMessage', function(data, cb)
   if data.messages == '%pos%' then
-    local myPos = GetEntityCoords(PlayerPedId())
-    data.messages = 'GPS: ' .. myPos.x .. ', ' .. myPos.y
+    local myPos = GetCharCoordinates(GetPlayerChar(-1))
+    data.message = 'GPS: ' .. myPos.x .. ', ' .. myPos.y
   end
   TriggerServerEvent('gksphone:sendgroupmessage', data.groupid, data.groupname, data.messages, data.contacts, data.number)
 end)
@@ -649,14 +594,14 @@ RegisterNUICallback('getContacts', function(data, cb)
   cb(json.encode(contacts))
 end)
 RegisterNUICallback('setGPS', function(data, cb)
-  SetNewWaypoint(tonumber(data.x), tonumber(data.y))
+  AddBlipForCoord(tonumber(data.x), tonumber(data.y), 1.0)
   TriggerEvent('gksphone:notifi', {title = 'GPS', message = 'GPS Location has been set', img= '/html/static/img/icons/maps.png' })
   cb()
 end)
 RegisterNUICallback('getPhoneAvatar', function(data, cb)
-  ESX.TriggerServerCallback('gksphone:getAvatar', function(avatarr)
+  --[[ESX.TriggerServerCallback('gksphone:getAvatar', function(avatarr)
     SendNUIMessage({event = 'phone_avatar', avatarr = avatarr})
-  end)
+  end)]] -- not in citizen
 end)
 
 
@@ -768,31 +713,7 @@ CreateThread(function()
   while true do
       if flas or ignoreFocus then
           Wait(0)
-          DisableControlAction(0, 0, true)    -- Next Camera
-         -- DisableControlAction(0, 1, true)    -- Look Left/Right
-         -- DisableControlAction(0, 2, true)    -- Look up/Down
-          DisableControlAction(0, 16, true)   -- Next Weapon
-          DisableControlAction(0, 17, true)   -- Select Previous Weapon
-          DisableControlAction(0, 22, true)   -- Jump
-          DisableControlAction(0, 24, true)   -- Attack
-          DisableControlAction(0, 25, true)   -- Aim
-          DisableControlAction(0, 26, true)   -- Look Behind
-          DisableControlAction(0, 36, true)   -- Input Duck/Sneak
-          DisableControlAction(0, 37, true)   -- Weapon Wheel
-          DisableControlAction(0, 44, true)   -- Cover
-          DisableControlAction(0, 45, true)   -- Cover
-          DisableControlAction(0, 223, true)   -- Attack
-          DisableControlAction(0, 229, true)   -- Attack    
-          DisableControlAction(0, 237, true)   -- Attack            
-       --   DisableControlAction(0, 245, true)  -- Chat
-          DisableControlAction(0, 257, true)   -- Attack    
-          DisableControlAction(0, 329, true)   -- Attack
-          DisableControlAction(0, 346, true)   -- Attack  
-
-          DisableControlAction(0, 289, true) -- Inventory
-          DisableControlAction(0, 311, true) -- Inventory
-          DisableControlAction(0, 303, true) -- Inventory
-          DisableControlAction(0, 182, true) -- Inventory
+          SetPlayerControl(GetPlayerId(), false)
       else
           Wait(200)
       end
@@ -812,10 +733,10 @@ CreateThread(function()
 		Citizen.Wait(5)
 		if flas then
       letSleep = false
-      local coords = GetEntityCoords(PlayerPedId())
-      local kierunek = GetEntityRotation(PlayerPedId())
+      local coords = GetCharCoordinates(GetPlayerChar(-1))
+      local kierunek = GetCharHeading(GetPlayerChar(-1))
       local vec = RotAnglesToVec(kierunek)
-      DrawSpotLight(coords.x,coords.y,coords.z,vec.x,vec.y,vec.z,255,255,255,20.0,8.0,10.0,15.0,50.0)	
+      DrawLightWithRange(coords.x,coords.y,coords.z,vec.x,vec.y,vec.z,255,255,255,20.0,8.0,10.0,15.0,50.0)	
     else
       letSleep = true	
 		end
